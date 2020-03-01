@@ -3,6 +3,9 @@ os: osx
 
 install:
   - sh add-osx-key.sh
+  - curl -o jamovi.zip https://download.jamovi.org/travis-builds/jamovi-unsigned.zip
+  - unzip jamovi.zip
+  - sh sign.sh
   
 script:
   - echo done
