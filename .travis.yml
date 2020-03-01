@@ -1,0 +1,8 @@
+
+os: osx
+
+install:
+  - sh add-osx-key.sh
+  
+script:
+  - echo done
