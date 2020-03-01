@@ -1,11 +1,11 @@
 #!/bin/sh -u
 
-ASC_PROVIDER="$1"
-ASC_USERNAME="$2"
-ASC_PASSWORD="$3"
+ASC_USERNAME="$1"
+ASC_PASSWORD="$2"
 
-BUNDLE_ID="$4"
-BUNDLE_PKG="$5"
+BUNDLE_ID="$3"
+BUNDLE_APP="$4"
+BUNDLE_ZIP="$5"
 
 
 # create temporary files
@@ -20,19 +20,19 @@ trap finish EXIT
 
 
 # submit app for notarization
-if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --asc-provider "$ASC_PROVIDER" --username "$ASC_USERNAME" --password "$ASC_PASSWORD" -f "$BUNDLE_PKG" > "$NOTARIZE_APP_LOG" 2>&1; then
+if xcrun altool --notarize-app --primary-bundle-id "$BUNDLE_ID" --username "$ASC_USERNAME" --password "$ASC_PASSWORD" -f "$BUNDLE_ZIP" > "$NOTARIZE_APP_LOG" 2>&1; then
 	cat "$NOTARIZE_APP_LOG"
 	RequestUUID=$(awk -F ' = ' '/RequestUUID/ {print $2}' "$NOTARIZE_APP_LOG")
 
 	# check status periodically
 	while sleep 60 && date; do
 		# check notarization status
-		if xcrun altool --notarization-info "$RequestUUID" --asc-provider "$ASC_PROVIDER" --username "$ASC_USERNAME" --password "$ASC_PASSWORD" > "$NOTARIZE_INFO_LOG" 2>&1; then
+		if xcrun altool --notarization-info "$RequestUUID" --username "$ASC_USERNAME" --password "$ASC_PASSWORD" > "$NOTARIZE_INFO_LOG" 2>&1; then
 			cat "$NOTARIZE_INFO_LOG"
 
 			# once notarization is complete, run stapler and exit
 			if ! grep -q "Status: in progress" "$NOTARIZE_INFO_LOG"; then
-				xcrun stapler staple "$BUNDLE_PKG"
+				xcrun stapler staple "$BUNDLE_APP"
 				exit "$?"
 			fi
 		else
