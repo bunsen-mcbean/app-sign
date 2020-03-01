@@ -22,9 +22,3 @@ codesign --deep --timestamp --verbose --force --entitlements "$ENTITLEMENTS" --s
 electron-osx-sign --binaries=jamovi.app/Contents/MacOS/python,jamovi.app/Contents/MacOS/jamovi,jamovi.app/Contents/MacOS/jamovi-engine --hardened-runtime=true --entitlements="$ENTITLEMENTS" --entitlements-inherit="$ENTITLEMENTS" jamovi.app
 
 spctl -a -t exec -vvv jamovi.app
-
-hdiutil create -size 1000m tmp.dmg -ov -volname "jamovi" -fs HFS+ -srcfolder .
-hdiutil convert tmp.dmg -format UDZO -o jamovi-$VERSION-macos.dmg
-rm -f tmp.dmg
-
-ditto -c -k --sequesterRsrc --keepParent jamovi.app jamovi-$VERSION-macos.zip
