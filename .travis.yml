@@ -22,8 +22,11 @@ script:
   - sh sign.sh
   - ditto -c -k --sequesterRsrc --keepParent jamovi.app jamovi.zip
   - sh notarize-app.sh jon@thon.cc ${APP_SPECIFIC_PASSWORD} org.jamovi.jamovi jamovi.app jamovi.zip
-  - rm jamovi.zip
-  - hdiutil create -size 1000m tmp.dmg -ov -volname "jamovi" -fs HFS+ -srcfolder .
+  
+  - mkdir bundle
+  - mv jamovi.app bundle
+  - ln -s /Applications bundle/Applications
+  - hdiutil create -size 1000m tmp.dmg -ov -volname "jamovi" -fs HFS+ -srcfolder bundle
   - hdiutil convert tmp.dmg -format UDZO -o jamovi.dmg
   - rm -f tmp.dmg
 
