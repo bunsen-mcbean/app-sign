@@ -1,10 +1,12 @@
 
 os: osx
+language: node_js
 
 install:
+  - npm install -g electron-osx-sign
   - sh add-osx-key.sh
   - curl -f -o jamovi.zip https://downloads.jamovi.org/travis-builds/jamovi-unsigned.zip
-  - unzip jamovi.zip
+  - unzip -q jamovi.zip
   - sh sign.sh
   
 script:
