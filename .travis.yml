@@ -5,6 +5,9 @@ language: node_js
 node_js:
   - 8
 
+env:
+  HOMEBREW_NO_AUTO_UPDATE: 1
+
 install:
   - npm install -g electron-osx-sign
   - brew install marcelomazza/homebrew-curl-libssh2/curl
