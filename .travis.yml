@@ -22,6 +22,8 @@ script:
   - sh sign.sh
   - ditto -c -k --sequesterRsrc --keepParent jamovi.app jamovi.zip
   - sh notarize-app.sh jon@thon.cc ${APP_SPECIFIC_PASSWORD} org.jamovi.jamovi jamovi.app jamovi.zip
+  - rm jamovi.zip
+  - ditto -c -k --sequesterRsrc --keepParent jamovi.app jamovi.zip
   
   - mkdir bundle
   - mv jamovi.app bundle
@@ -31,8 +33,19 @@ script:
   - rm -f tmp.dmg
 
 after_success:
+  - echo "${SFTP_KEY}" | base64 --decode >/tmp/sftp_rsa
+
   - /usr/local/opt/curl/bin/curl
          --ftp-create-dirs
          --insecure
+         --key /tmp/sftp_rsa
          -T jamovi.dmg
-         sftp://${SFTP_USER}:${SFTP_PASSWORD}@downloads.jamovi.org/home/${SFTP_USER}/downloads.jamovi.org/travis-builds/jamovi-$VERSION-macos.dmg
+         sftp://${SFTP_USER}@jamovi.org/home/${SFTP_USER}/jamovi.org/downloads/jamovi-$VERSION-macos.dmg
+
+  - /usr/local/opt/curl/bin/curl
+         --ftp-create-dirs
+         --insecure
+         --key /tmp/sftp_rsa
+         -T jamovi.zip
+         sftp://${SFTP_USER}@jamovi.org/home/${SFTP_USER}/jamovi.org/downloads/jamovi-$VERSION-macos.zip
+
