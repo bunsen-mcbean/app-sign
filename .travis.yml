@@ -13,7 +13,7 @@ install:
   - brew install marcelomazza/homebrew-curl-libssh2/curl
   
   - sh add-osx-key.sh
-  - curl -f -o jamovi.zip https://downloads.jamovi.org/travis-builds/jamovi-unsigned.zip
+  - curl -f -o jamovi.zip https://www.jamovi.org/downloads/jamovi-unsigned.zip
   - unzip -q jamovi.zip
   - export VERSION=`cat jamovi.app/Contents/Resources/jamovi/version`
   - rm jamovi.zip
@@ -36,6 +36,7 @@ after_success:
   - echo "${SFTP_KEY}" | base64 --decode >/tmp/sftp_rsa
 
   - /usr/local/opt/curl/bin/curl
+         -f
          --ftp-create-dirs
          --insecure
          --key /tmp/sftp_rsa
@@ -43,6 +44,7 @@ after_success:
          sftp://${SFTP_USER}@jamovi.org/home/${SFTP_USER}/jamovi.org/downloads/jamovi-$VERSION-macos.dmg
 
   - /usr/local/opt/curl/bin/curl
+         -f
          --ftp-create-dirs
          --insecure
          --key /tmp/sftp_rsa
