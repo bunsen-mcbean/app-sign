@@ -9,7 +9,7 @@ env:
   HOMEBREW_NO_AUTO_UPDATE: 1
 
 install:
-  - npm install -g electron-osx-sign
+  - npm install -g electron-osx-sign@0.4.15
   - brew install marcelomazza/homebrew-curl-libssh2/curl
   
   - sh add-osx-key.sh
