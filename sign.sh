@@ -19,6 +19,8 @@ codesign --deep --timestamp --verbose --force --entitlements "$ENTITLEMENTS" --s
 codesign --deep --timestamp --verbose --force --entitlements "$ENTITLEMENTS" --sign "$IDENTITY" --options runtime jamovi.app/Contents/MacOS/R
 codesign --deep --timestamp --verbose --force --entitlements "$ENTITLEMENTS" --sign "$IDENTITY" --options runtime jamovi.app/Contents/Frameworks/R.framework/Versions/3.6/Resources/bin/exec/R
 
+echo "performing electron-osx-sign"
+
 electron-osx-sign --binaries=jamovi.app/Contents/MacOS/python,jamovi.app/Contents/MacOS/jamovi,jamovi.app/Contents/MacOS/jamovi-engine --hardened-runtime=true --entitlements="$ENTITLEMENTS" --entitlements-inherit="$ENTITLEMENTS" jamovi.app
 
 spctl -a -t exec -vvv jamovi.app
